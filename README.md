@@ -1,76 +1,29 @@
-<!-- ## Database Table Schema -->
-## users table
+# Angular Chat
 
-* id (uuid)
-* full_name (text)
-* avatar_url (text)
+Angular Chat is an Angular-based real-time chat application that uses Supabase as the backend service platform. The application allows users to sign up using Google authentication, participate in chat conversations, delete their own messages, and log out.
 
-## Creating a users table
+## Features
 
-```sql
-CREATE TABLE public.users (
-   id uuid not null references auth.users on delete cascade,
-   full_name text NULL,
-   avatar_url text NULL,
-   primary key (id)
-);
-```
+- **Google Authentication**: Sign up and log in using your Google account.
+- **Real-time Chat**: Send and receive messages in real-time.
+- **Delete Messages**: Delete your own chat messages.
+- **Logout**: Securely log out from the application.
 
-## Enable Row Level Security
+## Technologies Used
 
-```sql
-ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;
-```
+- **Angular**: Frontend framework for building the web application.
+- **Supabase**: Backend as a Service (BaaS) providing authentication, database, and real-time capabilities.
+- **Bootstrap**: For responsive UI design.
+- **Zone.js**: For change detection in Angular.
 
-## Permit Users Access Their Profile
+## Getting Started
 
-```sql
-CREATE POLICY "Permit Users to Access Their Profile"
-  ON public.users
-  FOR SELECT
-  USING ( auth.uid() = id );
-```
+Follow these instructions to get a copy of the project up and running on your local machine for development and testing purposes.
 
-## Permit Users to Update Their Profile
+### Prerequisites
 
-```sql
-CREATE POLICY "Permit Users to Update Their Profile"
-  ON public.users
-  FOR UPDATE
-  USING ( auth.uid() = id );
-```
+- **Node.js** and **npm**: Ensure you have Node.js and npm installed. You can download and install them from [nodejs.org](https://nodejs.org/).
+- **Angular CLI**: Install Angular CLI globally using npm.
 
-## Supabase Functions
-
-```sql
-CREATE
-OR REPLACE FUNCTION public.user_profile() RETURNS TRIGGER AS $$ BEGIN INSERT INTO public.users (id, full_name,avatar_url)
-VALUES
-  (
-    NEW.id,
-    NEW.raw_user_meta_data ->> 'full_name'::TEXT,
-    NEW.raw_user_meta_data ->> 'avatar_url'::TEXT,
-  );
-RETURN NEW;
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-```
-
-## Supabase Trigger
-
-```sql
-  CREATE TRIGGER
-  create_user_trigger
-  AFTER INSERT ON auth.users
-  FOR EACH ROW
-  EXECUTE PROCEDURE
-    public.user_profile();
-```
-
-## Chat_Messages table (Real Time)
-
-* id (uuid)
-* Created At (date)
-* text (text)
-* editable (boolean)
-* sender (uuid)
+```bash
+npm install

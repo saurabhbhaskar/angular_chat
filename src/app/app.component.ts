@@ -7,10 +7,10 @@ import { ChatComponent } from './pages/chat/chat.component';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, LoginComponent, ChatComponent],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  title = 'ng-chat';
+  title = 'Angular Chat';
 }
